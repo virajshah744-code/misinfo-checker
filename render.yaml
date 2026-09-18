@@ -1,0 +1,20 @@
+# Render Blueprint for the API. The browser client is on Vercel
+# (web/, https://verilens-mu.vercel.app) and calls this service directly,
+# so its origin is allowed through CORS_ORIGINS.
+#
+# The models need ~3-4 GB of RAM. The free plan has 512 MB: the service
+# starts and /api/health answers, but a check that loads a model will be
+# killed for running out of memory. Change `plan` to `pro` (4 GB) or
+# larger for the full pipeline.
+services:
+  - type: web
+    name: verilens-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: CORS_ORIGINS
+        value: https://verilens-mu.vercel.app
+      - key: MISINFO_TORCH_THREADS
+        value: "1"

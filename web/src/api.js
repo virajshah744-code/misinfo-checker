@@ -12,13 +12,18 @@
  * and proxies `/api` to Flask (still same-origin to the browser), and a
  * bundle opened straight off disk has no origin to borrow, so it points
  * at the default dev address. Hence the fallbacks.
+ *
+ * The one exception is a static host (Vercel) that serves only the
+ * bundle: there the API lives elsewhere, so the build is given its
+ * origin as VITE_API_ORIGIN, and the server allows it via CORS_ORIGINS.
  */
 const CONFIG = window.__VERILENS__ || {}
 
 const ORIGIN =
-  window.location.protocol === 'file:'
+  import.meta.env.VITE_API_ORIGIN?.replace(/\/+$/, '') ||
+  (window.location.protocol === 'file:'
     ? 'http://127.0.0.1:5000'
-    : window.location.origin
+    : window.location.origin)
 
 const API = ORIGIN + (CONFIG.apiBase || '/api')
 

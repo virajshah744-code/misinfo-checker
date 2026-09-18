@@ -104,6 +104,31 @@ def create_app(frontend=FRONTEND):
 
     frontend = os.path.abspath(frontend)
 
+    # ---- cross-origin callers ------------------------------------
+    #
+    # Same-origin needs none of this. It exists for a deployment where
+    # the bundle is on a static host and this server is API-only; that
+    # host's origin goes in CORS_ORIGINS (comma-separated). Unset, no
+    # other origin is allowed, which is the behaviour described above.
+    allowed = {
+        origin.strip().rstrip("/")
+        for origin in os.getenv("CORS_ORIGINS", "").split(",")
+        if origin.strip()
+    }
+
+    @app.after_request
+    def _cors(response):
+        origin = request.headers.get("Origin", "")
+
+        if origin and (origin in allowed or "*" in allowed):
+            response.headers["Access-Control-Allow-Origin"] = origin
+            response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+            response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+            response.headers["Access-Control-Max-Age"] = "86400"
+            response.headers.add("Vary", "Origin")
+
+        return response
+
     # ---- the page -------------------------------------------------
 
     @app.get("/")
