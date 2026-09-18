@@ -19,3 +19,4 @@ data/image_index.json
 !web/index.html
 !frontend/index.html
 node_modules/
+.venv/

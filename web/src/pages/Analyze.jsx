@@ -10,6 +10,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { LIMITS, check, labelClass, pct } from '../api.js'
 import { Bar, Card, reduceMotion, useToast } from '../ui.jsx'
+import GraphBuilder from '../GraphBuilder.jsx'
 
 const TYPES = ['text', 'link', 'image', 'video']
 
@@ -29,7 +30,7 @@ export default function Analyze({ go, result, onResult, onReset }) {
   const [url, setUrl] = useState('')
   const [caption, setCaption] = useState('')
   const [file, setFile] = useState(null)
-  const [graph, setGraph] = useState(false)
+  const [graph, setGraph] = useState(true)
   const [agentic, setAgentic] = useState(false)
 
   const [running, setRunning] = useState(false)
@@ -136,7 +137,7 @@ export default function Analyze({ go, result, onResult, onReset }) {
       const data = await check(path, payload)
 
       setStep(STEPS.length)
-      onResult(data)
+      onResult(data, type)
       toast('Analysis complete: ' + data.verdict.label)
     } catch (failure) {
       setStep(STEPS.length)
@@ -332,6 +333,16 @@ export default function Analyze({ go, result, onResult, onReset }) {
           )}
         </Card>
       </div>
+
+      {!error && !running && result && (
+        <Card style={{ marginTop: 16 }}>
+          <div className="row">
+            <div className="section">Evidence graph &amp; citations</div>
+            <span className="tag">Live result</span>
+          </div>
+          <GraphBuilder data={result} />
+        </Card>
+      )}
     </section>
   )
 }

@@ -110,15 +110,16 @@ def create_app(frontend=FRONTEND):
     # the bundle is on a static host and this server is API-only; that
     # host's origin goes in CORS_ORIGINS (comma-separated). Unset, no
     # other origin is allowed, which is the behaviour described above.
-    allowed = {
-        origin.strip().rstrip("/")
-        for origin in os.getenv("CORS_ORIGINS", "").split(",")
-        if origin.strip()
-    }
-
+    # Read per request rather than here, because `app` is built at import
+    # and `.env` is loaded after that, in `__main__`.
     @app.after_request
     def _cors(response):
         origin = request.headers.get("Origin", "")
+        allowed = {
+            value.strip().rstrip("/")
+            for value in os.getenv("CORS_ORIGINS", "").split(",")
+            if value.strip()
+        }
 
         if origin and (origin in allowed or "*" in allowed):
             response.headers["Access-Control-Allow-Origin"] = origin
@@ -345,6 +346,17 @@ app = create_app()
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
+
+    # API keys for the live retrievers live in the project's `.env`.
+    # Loaded only here, when run as a server: the keys are read at call
+    # time (backend/common/http.py), and importing this module — as the
+    # tests do — should not quietly switch real network retrievers on.
+    try:
+        from dotenv import load_dotenv
+
+        load_dotenv(os.path.join(os.path.dirname(__file__), "..", "..", ".env"))
+    except ImportError:
+        log.warning("python-dotenv is not installed; .env was not loaded")
 
     app.run(
         host=os.getenv("HOST", "127.0.0.1"),

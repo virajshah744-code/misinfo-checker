@@ -18,3 +18,9 @@ services:
         value: https://verilens-mu.vercel.app
       - key: MISINFO_TORCH_THREADS
         value: "1"
+      # Secrets: Render asks for these when the Blueprint is applied.
+      # They never live in the repo (.env is gitignored).
+      - key: GOOGLE_FACTCHECK_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false

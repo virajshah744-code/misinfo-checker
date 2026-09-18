@@ -8,6 +8,7 @@
  */
 import { useEffect, useState } from 'react'
 import { getHealth } from './api.js'
+import { addToHistory, clearHistory, loadHistory, summarize } from './history.js'
 import { reduceMotion, ToastHost, useRipple, useToast } from './ui.jsx'
 import Analyze from './pages/Analyze.jsx'
 import Evidence from './pages/Evidence.jsx'
@@ -39,6 +40,15 @@ function Shell() {
   const toast = useToast()
   const [page, setPage] = useState('home')
   const [result, setResult] = useState(null)
+  const [history, setHistory] = useState(loadHistory)
+  const health = useHealth()
+
+  /* Every finished run is remembered, so the command centre can count
+     real checks rather than invented ones. */
+  function record(data, inputType) {
+    setResult(data)
+    setHistory((rows) => addToHistory(rows, summarize(data, inputType)))
+  }
 
   useRipple()
 
@@ -48,12 +58,21 @@ function Shell() {
   }
 
   const pages = {
-    home: <Home go={go} />,
+    home: (
+      <Home
+        go={go}
+        result={result}
+        history={history}
+        health={health}
+        onResult={record}
+        onClear={() => setHistory(clearHistory())}
+      />
+    ),
     analyze: (
       <Analyze
         go={go}
         result={result}
-        onResult={setResult}
+        onResult={record}
         onReset={() => setResult(null)}
       />
     ),
@@ -97,7 +116,7 @@ function Shell() {
               AI signals support reviewers; they never replace evidence or human
               judgment.
             </p>
-            <Health />
+            <Health {...health} />
             <button
               className="btn ghost"
               onClick={() => toast('Privacy controls are represented in this demo')}
@@ -129,7 +148,7 @@ function Shell() {
  * retriever or a model is missing, not that the claim is unusual, and
  * this says so before the run rather than after it.
  */
-function Health() {
+function useHealth() {
   const [health, setHealth] = useState(null)
   const [failed, setFailed] = useState(false)
 
@@ -145,6 +164,10 @@ function Health() {
     }
   }, [])
 
+  return { health, failed }
+}
+
+function Health({ health, failed }) {
   if (failed) {
     return (
       <p className="small red" style={{ marginTop: 10 }}>

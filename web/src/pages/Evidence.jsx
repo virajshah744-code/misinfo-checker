@@ -8,6 +8,7 @@
  */
 import { labelClass, pct } from '../api.js'
 import { Bar, Card } from '../ui.jsx'
+import GraphBuilder from '../GraphBuilder.jsx'
 
 export default function Evidence({ go, result }) {
   return (
@@ -110,6 +111,11 @@ function Live({ data, go }) {
           </div>
         </Card>
       </div>
+
+      <Card style={{ marginTop: 16 }}>
+        <div className="section">Evidence graph &amp; citations</div>
+        <GraphBuilder data={data} />
+      </Card>
 
       {data.agents && (
         <Card style={{ marginTop: 16 }}>

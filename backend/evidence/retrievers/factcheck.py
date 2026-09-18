@@ -30,13 +30,25 @@ log = logging.getLogger(__name__)
 ENDPOINT = "https://factchecktools.googleapis.com/v1alpha1/claims:search"
 CACHE_NAMESPACE = "factcheck"
 KEY_ENV = "GOOGLE_FACTCHECK_KEY"
+# Also accepted, because it is the name people reach for first.
+KEY_ENV_ALIASES = ("GOOGLE_FACTCHECKER_API_KEY", "GOOGLE_FACTCHECK_API_KEY")
 
 DEFAULT_LANGUAGES = ("en", "hi")
 PAGE_SIZE = 10
 
 
+def _key():
+    for name in (KEY_ENV, *KEY_ENV_ALIASES):
+        key = http.api_key(name)
+
+        if key:
+            return key
+
+    return None
+
+
 def available():
-    return http.api_key(KEY_ENV) is not None
+    return _key() is not None
 
 
 def _publisher(review):
@@ -96,7 +108,7 @@ def search(claim_id, query, languages=DEFAULT_LANGUAGES, page_size=PAGE_SIZE):
     Returns `[]` — never raises, never None — when the key is missing or
     the API fails, so a caller can always iterate the result.
     """
-    key = http.api_key(KEY_ENV)
+    key = _key()
 
     if not key:
         log.info("%s is not set; skipping the fact-check retriever", KEY_ENV)

@@ -145,7 +145,9 @@ export function Metric({ value, suffix = '', className = '' }) {
     let frame
 
     const tick = (now) => {
-      const p = Math.min(1, (now - start) / duration)
+      // A frame timestamp can predate `start`; clamp it, or a zero
+      // counts through negative values and renders as "-0".
+      const p = Math.min(1, Math.max(0, (now - start) / duration))
       const eased = 1 - Math.pow(1 - p, 3)
 
       setShown(Math.round(value * eased))
