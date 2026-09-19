@@ -1,6 +1,6 @@
 # Misinfo Checker
 
-## Demo video
+## Live video
 
 https://github.com/virajshah744-code/misinfo-checker/blob/master/demo/verilense_demo.mp4
 
