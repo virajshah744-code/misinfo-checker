@@ -27,6 +27,22 @@ stage consumes, so stages can be built, tested and swapped independently.
 
 See [`PROJECT_STATUS.md`](PROJECT_STATUS.md) for the gap analysis.
 
+## Screenshots
+
+These are the seven views of the live web client, <https://verilens-mu.vercel.app>.
+Full-size images and notes on how they were taken are in
+[`screenshots/`](screenshots/README.md).
+
+| Command center | Multimodal analysis |
+|---|---|
+| ![Command center](screenshots/01-command-center.png) | ![Multimodal analysis](screenshots/02-multimodal-analysis.png) |
+| **Media packet** | **Evidence fusion** |
+| ![Media packet](screenshots/03-media-packet.png) | ![Evidence fusion](screenshots/04-evidence-fusion.png) |
+| **Response studio** | **Time & narrative radar** |
+| ![Response studio](screenshots/05-response-studio.png) | ![Time & narrative radar](screenshots/06-time-narrative-radar.png) |
+| **Human review** | |
+| ![Human review](screenshots/07-human-review.png) | |
+
 ---
 
 ## Stage 1 — Ingest → `MediaPacket`
