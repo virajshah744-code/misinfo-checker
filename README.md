@@ -4,13 +4,9 @@
 
 https://github.com/virajshah744-code/misinfo-checker/blob/master/demo/verilense_demo.mp4
 
-## Live site
-
-https://verilens-mu.vercel.app
-
 ## Screenshots
 
-The seven views of the live web client, <https://verilens-mu.vercel.app>.
+The seven views of the web client.
 Full-size images and notes on how they were taken are in
 [`screenshots/`](screenshots/README.md).
 
