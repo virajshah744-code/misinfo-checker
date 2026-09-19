@@ -2,13 +2,7 @@
 
 ## Demo video
 
-[![VeriLens walkthrough video](demo/thumbnail.png)](https://github.com/virajshah744-code/misinfo-checker/blob/master/demo/verilense_demo.mp4)
-
-**[▶ Watch the 2-minute walkthrough](https://github.com/virajshah744-code/misinfo-checker/blob/master/demo/verilense_demo.mp4)**
-([direct MP4](https://github.com/virajshah744-code/misinfo-checker/raw/master/demo/verilense_demo.mp4)).
-It checks a forwarded Chennai flood rumour (**false**), then a flood photo
-captioned as "today" (**misleading**: the photo was online by 2015-12-02),
-and ends with the evidence graph, a correction draft and human review.
+https://github.com/virajshah744-code/misinfo-checker/blob/master/demo/verilense_demo.mp4
 
 ## Screenshots
 
